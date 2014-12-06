@@ -1,0 +1,67 @@
+CREATE DATABASE ecotravel;
+
+CREATE TABLE `ads` (
+  `adId` int(11) NOT NULL AUTO_INCREMENT,
+  `driverId` int(11) NOT NULL,
+  `TownFrom` varchar(45) NOT NULL,
+  `TownTo` varchar(45) NOT NULL,
+  `dateOfTravel` datetime NOT NULL,
+  `freePlaces` int(11) NOT NULL,
+  PRIMARY KEY (`adId`),
+  KEY `fk_drivers_idx` (`driverId`),
+  CONSTRAINT `fk_drivers` FOREIGN KEY (`driverId`) REFERENCES `drivers` (`driverId`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `drivers` (
+  `driverId` int(11) NOT NULL AUTO_INCREMENT,
+  `profileId` int(11) NOT NULL,
+  `nameOfDriver` varchar(45) NOT NULL,
+  `telephone` varchar(45) NOT NULL,
+  `rating` int(11) NOT NULL,
+  `smokeInTheCar` tinyint(1) DEFAULT NULL,
+  `travels` int(11) NOT NULL,
+  `yearsInDriving` int(11) NOT NULL,
+  `musicInTheCar` varchar(45) NOT NULL,
+  PRIMARY KEY (`driverId`),
+  UNIQUE KEY `profileId_UNIQUE` (`profileId`),
+  KEY `fk_Profiles_idx` (`profileId`),
+  CONSTRAINT `fk_Profiles` FOREIGN KEY (`profileId`) REFERENCES `profiles` (`profileId`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `passengers` (
+  `passengerId` int(11) NOT NULL AUTO_INCREMENT,
+  `profileId` int(11) NOT NULL,
+  `name` varchar(45) NOT NULL,
+  `rating` int(11) NOT NULL,
+  `telephone` varchar(45) NOT NULL,
+  PRIMARY KEY (`passengerId`),
+  UNIQUE KEY `profileId_UNIQUE` (`profileId`),
+  CONSTRAINT `fk_profiles2` FOREIGN KEY (`profileId`) REFERENCES `profiles` (`profileId`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `profiles` (
+  `profileId` int(11) NOT NULL AUTO_INCREMENT,
+  `email` varchar(45) NOT NULL,
+  `password` varchar(45) NOT NULL,
+  `username` varchar(45) NOT NULL,
+  PRIMARY KEY (`profileId`),
+  UNIQUE KEY `email_UNIQUE` (`email`),
+  UNIQUE KEY `username_UNIQUE` (`username`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `reservations` (
+  `reservationId` int(11) NOT NULL AUTO_INCREMENT,
+  `passengerId` int(11) NOT NULL,
+  `adId` int(11) NOT NULL,
+  PRIMARY KEY (`reservationId`),
+  KEY `fk_passengers0_idx` (`passengerId`),
+  KEY `fk_ads_idx` (`adId`),
+  CONSTRAINT `fk_passengers0` FOREIGN KEY (`passengerId`) REFERENCES `passengers` (`passengerId`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_ads` FOREIGN KEY (`adId`) REFERENCES `ads` (`adId`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
